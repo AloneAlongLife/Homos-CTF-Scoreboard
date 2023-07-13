@@ -38,6 +38,14 @@ a:visited {
     min-width: 4em;
     border-left-width: 1px;
 }
+#scoreBoard .userColumn div:nth-child(9) {
+    flex: 0;
+    min-width: 6em;
+}
+#scoreBoard .userColumn div:nth-last-child(1),
+#scoreBoard .userColumn div:nth-last-child(2) {
+    flex: 0.8;
+}
 #scoreBoard .userColumn div:nth-child(2) {
     flex: 1.3;
 }

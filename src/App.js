@@ -6,7 +6,7 @@ import "./App.css"
 const SCOREMAP = [1, 100, 150, 200, 300, 0];
 
 function secFormat(value) {
-    if (isNaN(value)) {
+    if (isNaN(value) || value === 0) {
         return "NaN"
     }
 
@@ -19,7 +19,7 @@ function secFormat(value) {
     return `${value}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
 }
 
-function getScore(timestampArray, exscore=false) {
+function getScore(timestampArray, exscore = false) {
     let totalTime = 0;
     let totalScore = 0;
     timestampArray.forEach((timestamp, index) => {
@@ -68,7 +68,7 @@ export default class App extends React.Component {
                 const rawData = response.data.replaceAll(",}", "}");
                 const data = JSON.parse(rawData);
                 let currentBestTimeArray = this.state.bestTimeArray;
-                
+
                 // 尋找最快解題時間
                 Object.values(data).forEach((timestampArray) => {
                     timestampArray.forEach((timestamp, index) => {
@@ -93,7 +93,7 @@ export default class App extends React.Component {
                             if (timestamp === 0) {
                                 return NaN
                             }
-                            return timestamp - 1689120000 
+                            return timestamp - 1689120000
                         })
                     ]
                 }
@@ -151,6 +151,7 @@ export default class App extends React.Component {
                         </div>
                         <div>Score</div>
                         <div>Time Used</div>
+                        <div>Last Submit</div>
                     </div>
                     {userColumn}
                 </div>
@@ -181,6 +182,10 @@ class UserColumn extends React.Component {
         });
 
         const score = getScore(timeData);
+        const lastSubmit = Math.max.apply(
+            null,
+            timeData.filter((x) => { return !isNaN(x) })
+        )
         return (
             <div className="userColumn">
                 <div>{rank}</div>
@@ -188,6 +193,7 @@ class UserColumn extends React.Component {
                 {problemArray}
                 <div>{score[0]}</div>
                 <div>{secFormat(score[1])}</div>
+                <div>{secFormat(Math.max(0, lastSubmit))}</div>
             </div>
         )
     }
